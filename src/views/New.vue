@@ -15,13 +15,13 @@
       <label for="description">Описание</label>
       <textarea id="description" v-model="data.descr"></textarea>
     </div>
-    <button class="btn primary" >Создать</button>
+    <button class="btn primary" :disabled="!isActiveBtn">Создать</button>
   </form>
 </template>
 
 
 <script>
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
 import {useStore} from 'vuex'
 import {useRouter} from 'vue-router'
 
@@ -39,9 +39,15 @@ export default {
       status:''
     })
 
+    function isActiveBtn() {
+      if (data.value.title && data.value.date && data.value.descr)
+        return true
+    }
+
+
     function submit (){
       this.data.id = Date.now()
-      this.data.type = 'primary'
+      this.data.type = 'active'
       this.data.status = 'Активен'
       store.commit('addTask', data.value)
       store.commit('watchActiveTasks', 'add')
@@ -52,8 +58,10 @@ export default {
     }
 
     return {
+      isActiveBtn: computed (isActiveBtn),
       submit,
       data
+
     }
   }
 

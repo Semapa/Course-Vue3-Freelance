@@ -5,7 +5,7 @@
     <div class="card" v-for="(task, index) in tasks" :key="task.id">
       <h2 class="card-title">
         {{task.title}}
-        <AppStatus :type="task.type" :title="task.status"/>
+        <AppStatus :type="task.type" />
       </h2>
       <p>
         <strong>
@@ -31,14 +31,18 @@ export default {
     const store = useStore()
     const router = useRouter()
 
+
     function isTasks(){
       return store.getters.getTasks.length > 0 ? true : false
     }
 
     function watchTask(index) {
+      console.log('index', index)
       store.commit('addCurrentTask', store.getters.getTasks[index])
       router.push('/task')
     }
+
+
 
     function getActiveTasks(){
       return store.getters.getActiveTasks
@@ -49,6 +53,7 @@ export default {
       getActiveTasks: computed(getActiveTasks),
       tasks: store.getters.getTasks,
       watchTask
+
 
     }
 

@@ -23,8 +23,6 @@ export const store = createStore({
     mutations: {
         addTask(state, payload){
             state.tasks.push(payload)
-            console.log('state.tasks', state.tasks)
-
         },
         addCurrentTask(state, payload){
             state.currentTask = payload
@@ -40,11 +38,9 @@ export const store = createStore({
             // console.log('state.activeTasks', state.activeTasks)
         },
         changeStatus(state, payload){
-            let el= state.tasks.find(item => item.id === payload.id)
-            el.status = payload.status
-            el.type = payload.type
-            // console.log(payload)
-            // console.log('el',el)
+            let el = state.tasks.find(item => item.id === payload.id)
+            el.status = state.currentTask.status = payload.status
+            el.type = state.currentTask.type = payload.type
         }
 
     }

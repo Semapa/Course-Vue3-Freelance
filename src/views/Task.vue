@@ -1,11 +1,11 @@
 <template>
   <div class="card">
     <h2>{{currentTask.title}}</h2>
-    <p><strong>Статус</strong>: <AppStatus :type="currentTask.type" :title="currentTask.status" /></p>
+    <p><strong>Статус</strong>: <AppStatus :type="currentTask.type" /></p>
     <p><strong>Дэдлайн</strong>: {{ currentTask.date }}</p>
     <p><strong>Описание</strong>: {{ currentTask.descr }}</p>
     <div>
-      <button class="btn">Взять в работу</button>
+      <button class="btn" @click="workTask">Взять в работу</button>
       <button class="btn primary" @click="completeTask">Завершить</button>
       <button class="btn danger" @click="cancelTask">Отменить</button>
     </div>
@@ -27,6 +27,7 @@ export default {
     const store = useStore()
     // const router = useRouter()
 
+
     function getCurrentTask(){
       return store.getters.getCurrentTask
     }
@@ -35,25 +36,34 @@ export default {
       store.commit('watchActiveTasks', 'remove')
       store.commit('changeStatus', {
         id: store.state.currentTask.id,
-        type: 'danger',
+        type: 'cancelled',
         status: 'Отменен'
       })
-      // router.push('/tasks')
+      // router.push('/task')
     }
 
     function completeTask(){
       store.commit('watchActiveTasks', 'remove')
       store.commit('changeStatus', {
         id: store.state.currentTask.id,
-        type: 'primary',
+        type: 'done',
         status: 'Завершен'
+      })
+     }
+    function workTask(){
+      store.commit('watchActiveTasks', 'add')
+      store.commit('changeStatus', {
+        id: store.state.currentTask.id,
+        type: 'work',
+        status: 'Взят в работу'
       })
     }
 
     return {
       currentTask: computed(getCurrentTask),
-      cancelTask: computed(cancelTask),
-      completeTask: computed(completeTask)
+      cancelTask,
+      completeTask,
+      workTask
 
     }
   }
