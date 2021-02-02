@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <h3>
-      Freelance
+      Freelance &emsp; {{date}}
     </h3>
 
     <ul class="navbar-menu">
@@ -17,6 +17,12 @@
 
 <script>
 export default {
+  setup(){
+    const date = new Date().toLocaleDateString()
+    return {
+      date
+    }
+  }
 
 }
 </script>

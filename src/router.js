@@ -8,6 +8,6 @@ export default createRouter({
     routes: [
         {path: '/tasks', component: Tasks, alias: '/'},
         {path: '/new-task', component: NewTask},
-        {path: '/task', component: Task},
+        {path: '/task/:taskId?', component: Task},
     ]
 })

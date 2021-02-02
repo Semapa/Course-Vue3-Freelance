@@ -26,7 +26,7 @@ export default {
       active: 'Активен',
       cancelled: 'Отменен',
       done: 'Завершен',
-      work: 'Взят в работу'
+      work: 'Выполняется'
     }
 
     watch(props, val => {

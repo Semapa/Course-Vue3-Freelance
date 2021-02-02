@@ -47,10 +47,16 @@ export default {
 
     function submit (){
       this.data.id = Date.now()
-      this.data.type = 'active'
-      this.data.status = 'Активен'
+
+      if(Date.now() > Date.parse(this.data.date)){
+        this.data.type = 'cancelled'
+        this.data.status = 'Отменен'
+      } else {
+        this.data.type = 'active'
+        this.data.status = 'Активен'
+        store.commit('watchActiveTasks', 'add')
+      }
       store.commit('addTask', data.value)
-      store.commit('watchActiveTasks', 'add')
       router.push('/tasks')
       // или можно таким образом
       // router > router.push('/tasks')
@@ -61,7 +67,6 @@ export default {
       isActiveBtn: computed (isActiveBtn),
       submit,
       data
-
     }
   }
 

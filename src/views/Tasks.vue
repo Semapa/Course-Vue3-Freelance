@@ -14,23 +14,29 @@
           </small>
         </strong>
       </p>
-      <button class="btn primary" @click="watchTask(index)">Посмотреть</button>
+      <router-link :to="'/task/' + task.id">
+        <button class="btn primary" @click="watchTask(index)">Посмотреть</button>
+      </router-link>
     </div>
   </template>
 </template>
 
 <script>
-import {computed} from 'vue'
+import {computed,onMounted} from 'vue'
 import AppStatus from '../components/AppStatus'
 import {useStore} from 'vuex'
-import {useRouter} from "vue-router";
 
 export default {
   components: {AppStatus},
   setup(){
     const store = useStore()
-    const router = useRouter()
 
+    onMounted( () => {
+      console.log('onMounted')
+      store.commit('loadTask')
+      // console.log(store)
+      // $store.getters.loadTask
+    })
 
     function isTasks(){
       return store.getters.getTasks.length > 0 ? true : false
@@ -39,10 +45,7 @@ export default {
     function watchTask(index) {
       console.log('index', index)
       store.commit('addCurrentTask', store.getters.getTasks[index])
-      router.push('/task')
     }
-
-
 
     function getActiveTasks(){
       return store.getters.getActiveTasks
@@ -51,14 +54,9 @@ export default {
     return {
       getTasks: computed(isTasks),
       getActiveTasks: computed(getActiveTasks),
-      tasks: store.getters.getTasks,
+      tasks: computed(store.getters.getTasks),
       watchTask
-
-
     }
-
   },
-
-
 }
 </script>

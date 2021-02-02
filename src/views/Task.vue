@@ -19,23 +19,23 @@
 import {computed} from 'vue'
 import AppStatus from '../components/AppStatus'
 import {useStore} from "vuex";
-// import {useRouter} from "vue-router";
+import {useRoute} from "vue-router";
 
 export default {
   components: {AppStatus},
   setup(){
     const store = useStore()
-    // const router = useRouter()
-
+    const router = useRoute()
 
     function getCurrentTask(){
+      console.log('router.params.taskId', router.params.taskId)
       return store.getters.getCurrentTask
     }
 
     function cancelTask() {
       store.commit('watchActiveTasks', 'remove')
       store.commit('changeStatus', {
-        id: store.state.currentTask.id,
+        id: store.state.currentTaskId,
         type: 'cancelled',
         status: 'Отменен'
       })
@@ -45,7 +45,7 @@ export default {
     function completeTask(){
       store.commit('watchActiveTasks', 'remove')
       store.commit('changeStatus', {
-        id: store.state.currentTask.id,
+        id: store.state.currentTaskId,
         type: 'done',
         status: 'Завершен'
       })
@@ -53,7 +53,7 @@ export default {
     function workTask(){
       store.commit('watchActiveTasks', 'add')
       store.commit('changeStatus', {
-        id: store.state.currentTask.id,
+        id: store.state.currentTaskId,
         type: 'work',
         status: 'Взят в работу'
       })
@@ -63,8 +63,7 @@ export default {
       currentTask: computed(getCurrentTask),
       cancelTask,
       completeTask,
-      workTask
-
+      workTask,
     }
   }
 

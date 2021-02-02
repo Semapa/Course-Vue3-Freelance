@@ -11,12 +11,11 @@
 import TheNavbar from './components/TheNavbar'
 
 export default {
-  setup() {
+setup() {
+  return {
 
-    return {
-
-    }
-  },
+  }
+},
   components: {
     TheNavbar
   }

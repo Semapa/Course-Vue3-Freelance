@@ -5,8 +5,8 @@ export const store = createStore({
     state() {
         return {
             tasks: [],
-            currentTask: {},
-            activeTasks: 0
+            activeTasks: 0,
+            currentTaskId: 0
         }
     },
     getters: {
@@ -14,19 +14,28 @@ export const store = createStore({
             return state.tasks
         },
         getCurrentTask(state) {
-            return state.currentTask
+            let el = state.tasks.find(item => item.id === state.currentTaskId)
+            return el
         },
         getActiveTasks(state) {
             return state.activeTasks
         }
     },
     mutations: {
-        addTask(state, payload){
-            state.tasks.push(payload)
+        loadTask() {
+            let tasks = JSON.parse(localStorage.getItem('tasks'))
+            console.log('loadTask()',tasks)
+            // tasks.forEach((task) => {
+            //     console.log('loadTask()',task)
+            //     state.tasks.push(task)
+            // })
         },
-        addCurrentTask(state, payload){
-            state.currentTask = payload
-            // console.log('state.currentTask', state.currentTask)
+        addTask(state, task){
+            state.tasks.push(task)
+            localStorage.setItem('tasks', JSON.stringify(state.tasks))
+        },
+        addCurrentTask(state, taskId){
+            state.currentTaskId = taskId.id
         },
         watchActiveTasks(state, payload){
             if(payload === 'add') {
@@ -35,12 +44,12 @@ export const store = createStore({
             else {
                 if(state.activeTasks > 0) state.activeTasks --
             }
-            // console.log('state.activeTasks', state.activeTasks)
         },
         changeStatus(state, payload){
             let el = state.tasks.find(item => item.id === payload.id)
-            el.status = state.currentTask.status = payload.status
-            el.type = state.currentTask.type = payload.type
+            el.status = payload.status
+            el.type = payload.type
+            localStorage.setItem('tasks', JSON.stringify(state.tasks))
         }
 
     }
