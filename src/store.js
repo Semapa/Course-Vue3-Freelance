@@ -5,17 +5,16 @@ export const store = createStore({
     state() {
        return {
             tasks: localStorage.getItem('tasks') ? [...JSON.parse(localStorage.getItem('tasks'))] : [],
-            activeTasks: localStorage.getItem('activeTasks') || 0,
-            currentTaskId: 0
+            activeTasks: localStorage.getItem('activeTasks') || 0
         }
     },
     getters: {
         getTasks(state) {
             return state.tasks
         },
-        getCurrentTask(state) {
-            let el = state.tasks.find(item => item.id === state.currentTaskId)
-            return el
+        getCurrentTask: (state) => (id) => {
+            let el = state.tasks.find(item => item.id === +id)
+            return el ? el : 0
         },
         getActiveTasks(state) {
             return state.activeTasks
@@ -25,9 +24,6 @@ export const store = createStore({
         addTask(state, task){
             state.tasks.push(task)
             localStorage.setItem('tasks', JSON.stringify(state.tasks))
-        },
-        addCurrentTask(state, taskId){
-            state.currentTaskId = taskId.id
         },
         setActiveTasks(state, payload){
             if(payload === 'add') {
@@ -39,7 +35,7 @@ export const store = createStore({
             localStorage.setItem('activeTasks', state.activeTasks)
         },
         changeStatus(state, payload){
-            let el = state.tasks.find(item => item.id === payload.id)
+            let el = state.tasks.find(item => item.id === +payload.id)
             el.status = payload.status
             el.type = payload.type
             localStorage.setItem('tasks', JSON.stringify(state.tasks))
