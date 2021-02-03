@@ -3,9 +3,9 @@ import {createStore} from 'vuex'
 export const store = createStore({
 
     state() {
-        return {
-            tasks: [],
-            activeTasks: 0,
+       return {
+            tasks: localStorage.getItem('tasks') ? [...JSON.parse(localStorage.getItem('tasks'))] : [],
+            activeTasks: localStorage.getItem('activeTasks') || 0,
             currentTaskId: 0
         }
     },
@@ -22,14 +22,6 @@ export const store = createStore({
         }
     },
     mutations: {
-        loadTask() {
-            let tasks = JSON.parse(localStorage.getItem('tasks'))
-            console.log('loadTask()',tasks)
-            // tasks.forEach((task) => {
-            //     console.log('loadTask()',task)
-            //     state.tasks.push(task)
-            // })
-        },
         addTask(state, task){
             state.tasks.push(task)
             localStorage.setItem('tasks', JSON.stringify(state.tasks))
@@ -37,13 +29,14 @@ export const store = createStore({
         addCurrentTask(state, taskId){
             state.currentTaskId = taskId.id
         },
-        watchActiveTasks(state, payload){
+        setActiveTasks(state, payload){
             if(payload === 'add') {
                 state.activeTasks++
             }
             else {
                 if(state.activeTasks > 0) state.activeTasks --
             }
+            localStorage.setItem('activeTasks', state.activeTasks)
         },
         changeStatus(state, payload){
             let el = state.tasks.find(item => item.id === payload.id)
@@ -51,6 +44,5 @@ export const store = createStore({
             el.type = payload.type
             localStorage.setItem('tasks', JSON.stringify(state.tasks))
         }
-
     }
 })

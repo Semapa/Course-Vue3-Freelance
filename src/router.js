@@ -9,5 +9,7 @@ export default createRouter({
         {path: '/tasks', component: Tasks, alias: '/'},
         {path: '/new-task', component: NewTask},
         {path: '/task/:taskId?', component: Task},
-    ]
+    ],
+    linkActiveClass: 'active',
+    linkExactActiveClass: 'active'
 })

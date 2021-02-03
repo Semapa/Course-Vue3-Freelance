@@ -54,7 +54,7 @@ export default {
       } else {
         this.data.type = 'active'
         this.data.status = 'Активен'
-        store.commit('watchActiveTasks', 'add')
+        store.commit('setActiveTasks', 'add')
       }
       store.commit('addTask', data.value)
       router.push('/tasks')

@@ -1,6 +1,6 @@
 <template>
-  <h1 class="text-white center" v-if="!getTasks">Задач пока нет</h1>
-  <template  v-else-if="getTasks" >
+  <h1 class="text-white center" v-if="!tasks">Задач пока нет</h1>
+  <template  v-else-if="tasks" >
     <h3 class="text-white">Всего активных задач: {{getActiveTasks}}</h3>
     <div class="card" v-for="(task, index) in tasks" :key="task.id">
       <h2 class="card-title">
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {computed,onMounted} from 'vue'
+import {computed} from 'vue'
 import AppStatus from '../components/AppStatus'
 import {useStore} from 'vuex'
 
@@ -30,17 +30,6 @@ export default {
   components: {AppStatus},
   setup(){
     const store = useStore()
-
-    onMounted( () => {
-      console.log('onMounted')
-      store.commit('loadTask')
-      // console.log(store)
-      // $store.getters.loadTask
-    })
-
-    function isTasks(){
-      return store.getters.getTasks.length > 0 ? true : false
-    }
 
     function watchTask(index) {
       console.log('index', index)
@@ -52,9 +41,8 @@ export default {
     }
 
     return {
-      getTasks: computed(isTasks),
       getActiveTasks: computed(getActiveTasks),
-      tasks: computed(store.getters.getTasks),
+      tasks: (store.getters.getTasks),
       watchTask
     }
   },

@@ -10,13 +10,13 @@
       <button class="btn danger" @click="cancelTask">Отменить</button>
     </div>
   </div>
-  <h3 class="text-white center">
+  <h3 class="text-white center" v-if="!isRealId">
     Задачи с id = <strong>Tут АЙДИ</strong> нет.
   </h3>
 </template>
 
 <script>
-import {computed} from 'vue'
+import {computed, ref} from 'vue'
 import AppStatus from '../components/AppStatus'
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
@@ -27,13 +27,16 @@ export default {
     const store = useStore()
     const router = useRoute()
 
+    const isRealId = ref(true)
+
     function getCurrentTask(){
       console.log('router.params.taskId', router.params.taskId)
+      console.log('isRealId', isRealId.value)
       return store.getters.getCurrentTask
     }
 
     function cancelTask() {
-      store.commit('watchActiveTasks', 'remove')
+      store.commit('setActiveTasks', 'remove')
       store.commit('changeStatus', {
         id: store.state.currentTaskId,
         type: 'cancelled',
@@ -43,7 +46,7 @@ export default {
     }
 
     function completeTask(){
-      store.commit('watchActiveTasks', 'remove')
+      store.commit('setActiveTasks', 'remove')
       store.commit('changeStatus', {
         id: store.state.currentTaskId,
         type: 'done',
@@ -51,7 +54,7 @@ export default {
       })
      }
     function workTask(){
-      store.commit('watchActiveTasks', 'add')
+      store.commit('setActiveTasks', 'add')
       store.commit('changeStatus', {
         id: store.state.currentTaskId,
         type: 'work',
@@ -64,6 +67,7 @@ export default {
       cancelTask,
       completeTask,
       workTask,
+      isRealId
     }
   }
 
